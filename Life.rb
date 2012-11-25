@@ -43,9 +43,9 @@ class World
   end
 
   def print_world
-    puts "Current is " + @currentMatrix.to_s
+    # puts "Current is " + @currentMatrix.to_s
     current_matrix.values.each do |j|
-      j.each { |k| print k }
+      j.each { |k| if k == DEAD_CELL then print "." else print "O" end }
       puts
     end
   end
@@ -69,32 +69,32 @@ class World
   def get_cell(x, y)
     x, y = derive(x, y)
     
-    puts "\tx = " + x.to_s + " y = " + y.to_s + ": " +
-      current_matrix[x][y].to_s + "(" + x.to_s + ", " + y.to_s + ")"
-    # matrix = current_matrix
+    #puts "\tx = " + x.to_s + " y = " + y.to_s + ": " +
+    #  current_matrix[x][y].to_s + "(" + x.to_s + ", " + y.to_s + ")"
+  
     return current_matrix[x][y]
   end
 
   def num_living_neighbors(x,y)
     count = 0;
     
-    if (get_cell((x - 1), (y - 1)) == LIVING_CELL) then
+    if get_cell((x - 1), (y - 1))  == LIVING_CELL then
       count += 1 end
-    if get_cell((x - 1), y) == LIVING_CELL then 
+    if get_cell((x - 1), y)        == LIVING_CELL then 
       count += 1 end
     if get_cell((x - 1), (y + 1))  == LIVING_CELL then
       count += 1 end
-    if get_cell(x, (y - 1)) == LIVING_CELL then 
+    if get_cell(x, (y - 1))        == LIVING_CELL then 
       count += 1 end
-    if get_cell(x, (y + 1)) == LIVING_CELL then 
+    if get_cell(x, (y + 1))        == LIVING_CELL then 
       count += 1 end
     if get_cell((x + 1), (y - 1))  == LIVING_CELL then 
       count += 1 end
-    if get_cell((x + 1), y)  == LIVING_CELL then 
+    if get_cell((x + 1), y)        == LIVING_CELL then 
       count += 1 end
     if get_cell((x + 1), (y + 1))  == LIVING_CELL then
       count += 1 end
-    puts x.to_s + "," + y.to_s + ": " + count.to_s + " neighbors"
+    # puts x.to_s + "," + y.to_s + ": " + count.to_s + " neighbors"
     return count
   end
 
@@ -167,7 +167,7 @@ class World
       command = gets.chomp
       case
         when command.match(/\d/)
-          command.to_i.times iterate
+          command.to_i.times { iterate }
         when command.match(/[Ii]/)
           iterate
         when command.match(/[Qq]/)
@@ -182,7 +182,10 @@ end
 
 # EXECUTION STARTS HERE
 
-world = World.new(4,4)
+print "Size of world (integer) > "
+size = gets.chomp.to_i
+
+world = World.new(size - 1, size - 1)
 world.print_world
 world.set_from_console
 world.run_world
