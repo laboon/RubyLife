@@ -50,21 +50,29 @@ class World
     end
   end
 
+  def derive(x, y)
+    xDerived = x % @xSize
+    yDerived = y % @ySize
+    return xDerived, yDerived
+  end
+
   def make_live(x, y)
-    write_matrix = LIVING_CELL
+    x, y = derive(x, y)
+    write_matrix[x][y] = LIVING_CELL
   end
 
   def make_dead(x, y)
-    write_matrix = DEAD_CELL
+    x, y = derive(x, y)
+    write_matrix[x][y] = DEAD_CELL
   end
 
   def get_cell(x, y)
-    xDerived = x % @xSize
-    yDerived = y % @ySize
-    puts "\tx = " + xDerived.to_s + " y = " + yDerived.to_s + ": " +
-      current_matrix[xDerived][yDerived].to_s + "(" + x.to_s + ", " + y.to_s + ")"
+    x, y = derive(x, y)
+    
+    puts "\tx = " + x.to_s + " y = " + y.to_s + ": " +
+      current_matrix[x][y].to_s + "(" + x.to_s + ", " + y.to_s + ")"
     # matrix = current_matrix
-    return current_matrix[xDerived][yDerived];
+    return current_matrix[x][y]
   end
 
   def num_living_neighbors(x,y)
@@ -98,20 +106,20 @@ class World
         if k == LIVING_CELL
             case num_living_neighbors(x,y)
             when 0,1 
-              make_dead(j,k)
+              make_dead(x,y)
             when 2,3 
-              make_live(j,k)
+              make_live(x,y)
             when 4,5,6,7,8
-              make_dead(j,k)
+              make_dead(x,y)
             end
         else 
             case num_living_neighbors(x,y)
             when 0,1,2 
-              make_dead(j,k)
+              make_dead(x,y)
             when 3 
-              make_live(j,k)
+              make_live(x,y)
             when 4,5,6,7,8
-              make_dead(j,k)
+              make_dead(x,y)
             end
         end
         y += 1
